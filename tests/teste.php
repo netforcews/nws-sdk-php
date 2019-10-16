@@ -23,6 +23,9 @@ $auth->setCredentials([
     'secret' => '4321',
 ]);/**/
 
+$lista = Inquilino::query(Inquilino::envSandbox)->first();
+
+/*
 $inq = new Inquilino([], Inquilino::envSandbox);
 //$inq = Inquilino::find('d881c9df1v80924023884e30d191366919', Inquilino::envSandbox);
 $inq->ns = 'teste2';

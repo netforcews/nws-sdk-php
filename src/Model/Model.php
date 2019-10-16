@@ -13,8 +13,8 @@ class Model extends Response
      * @var array
      */
     protected $endpoints = [
-        'production' => '', // http://api.com/{version}
-        'sandbox'    => 'http://localhost/apps/admin/public/',
+        'production' => '',
+        'sandbox'    => '',
     ];
 
     /**
@@ -23,6 +23,13 @@ class Model extends Response
      * @var string
      */
     protected $primaryKey = 'id';
+
+    /**
+     * The environment of model.
+     *
+     * @var string
+     */
+    protected $environment = SdkClient::envProduction;
 
     /**
      * Indicates if the model exists.
@@ -36,10 +43,15 @@ class Model extends Response
      * 
      * @param array $data
      * @param array $env
+     * @param bool $exists
      */
-    public function __construct($data = [], $env = null)
+    public function __construct($data = [], $env = null, $exists = false)
     {
         parent::__construct($this->createClient($env), $data);
+
+        $this->environment = $env;
+
+        $this->exists = $exists;
     }
 
     /**
@@ -115,14 +127,16 @@ class Model extends Response
     /**
      * Criar novo model.
      * 
+     * @param string $env
      * @param array $data
+     * @param bool $exists
      * @return Model
      */
-    protected static function newModel($env, $data = [])
+    public static function newModel($env, $data = [], $exists = false)
     {
         $class = static::class;
 
-        return new $class($data, $env);
+        return new $class($data, $env, $exists);
     }
 
     /**
@@ -262,5 +276,15 @@ class Model extends Response
     public function getKey()
     {
         return $this->get($this->getKeyName());
+    }
+
+    /**
+     * Get environment of model.
+     * 
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
     }
 }
