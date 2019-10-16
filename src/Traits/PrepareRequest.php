@@ -1,5 +1,7 @@
 <?php namespace NetForce\Sdk\Traits;
 
+use NetForce\Sdk\Credentials;
+
 trait PrepareRequest
 {
     /**
@@ -24,7 +26,7 @@ trait PrepareRequest
      */
     protected function getAccessHeaders()
     {
-        $credentials = $this->config('credentials');
+        $credentials = Credentials::get();
         if (is_null($credentials) || (!is_array($credentials))) {
             return [];
         }
@@ -41,16 +43,6 @@ trait PrepareRequest
         }
 
         return [];
-    }
-
-    /**
-     * Atribuir uma nova credencial.
-     */
-    protected function setAccessCredentials($credentials)
-    {
-        $this->config([
-            'credentials' => $credentials,
-        ]);
     }
 
     /**

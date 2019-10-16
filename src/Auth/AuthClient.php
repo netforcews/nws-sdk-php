@@ -2,6 +2,7 @@
 
 use NetForce\Sdk\SdkClient;
 use NetForce\Sdk\Response;
+use NetForce\Sdk\Credentials;
 
 class AuthClient extends SdkClient
 {
@@ -31,7 +32,7 @@ class AuthClient extends SdkClient
         ]));
 
         if ($guard) {
-            $this->setAccessCredentials($ret);
+            Credentials::set($ret);
         }
 
         return $ret;
@@ -46,7 +47,7 @@ class AuthClient extends SdkClient
 
         // Remover credenciais
         if ($ret['status']) {
-            $this->setAccessCredentials([]);
+            Credentials::set([]);
         }
 
         return true;

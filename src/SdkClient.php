@@ -43,6 +43,8 @@ class SdkClient
     {
         $this->config = $config;
 
+        Credentials::setFromConfig($this->config);
+
         $this->client = new Client([
             'base_uri' => $this->getEndPoint(),
         ]);
