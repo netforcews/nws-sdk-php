@@ -1,6 +1,7 @@
 <?php namespace NetForce\Sdk\Traits;
 
 use NetForce\Sdk\Credentials;
+use Illuminate\Support\Str;
 
 trait PrepareRequest
 {
@@ -48,10 +49,19 @@ trait PrepareRequest
     /**
      * Tratar options request.
      * 
-     * @param $options
+     * @param string $method
+     * @param string $uri
+     * @param array $options
      */
-    protected function prepareRequest($method, &$options)
-    {
+    protected function prepareRequest($method, $uri, &$options)
+    {        
+        // Base URI
+        $base_uri = $this->getEndpoint();
+        if (($uri == '') && (Str::is('*/', $base_uri))) {
+            $base_uri = substr($base_uri, 0, -1);
+        }
+        $options['base_uri'] = $base_uri;
+
         // Send XDebug
         $xdebug = $this->config('xdebug', false);
         if ($xdebug !== false) {

@@ -1,6 +1,7 @@
 <?php
 use NetForce\Sdk\Auth\AuthClient;
 use NetForce\Sdk\Register\RegisterClient;
+use NetForce\Sdk\Entities\Inquilino;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -16,12 +17,24 @@ $auth = new AuthClient([
     //],
 ]);
 
-/*
+/**/
 $auth->setCredentials([
     'key'    => '1234',
     'secret' => '4321',
 ]);/**/
 
+$inq = new Inquilino([], Inquilino::envSandbox);
+//$inq = Inquilino::find('d881c9df1v80924023884e30d191366919', Inquilino::envSandbox);
+$inq->ns = 'teste2';
+$inq->nome = 'Teste 2';
+$inq->situacao = 'atv';
+$inq->save();
+
+$inq->nome = 'Teste 2 - atualizado';
+$inq->save();
+
+
+/*
 $x = $reg->register([
     'ns'       => 'teste',
     'nome'     => 'Inquilino de teste',

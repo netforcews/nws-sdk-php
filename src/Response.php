@@ -20,6 +20,11 @@ class Response
     /**
      * @var array
      */
+    protected $original = [];
+
+    /**
+     * @var array
+     */
     protected $relation = [];
 
     /**
@@ -41,13 +46,29 @@ class Response
         $this->client = $client;
         $this->_refUri = $refUri;
 
-        if (! is_null($data)) {
+        $this->setRawAttributes($data);
+    }
+
+    /**
+     * Atribuir dados.
+     * @param array $data
+     * @param bool $original
+     */
+    public function setRawAttributes($data, $original = false)
+    {
+        if (!is_null($data)) {
             if ($data instanceof ResponseInterface) {
                 $data = $this->client->toJson($data);
             }
-
-            $this->data = (array) $data;
         }
+
+        $this->data = (array)$data;
+
+        if ($original) {
+            $this->original = $this->data;
+        }
+
+        return $this;
     }
 
     /**
@@ -67,7 +88,7 @@ class Response
 
         // Verificar se eh um relation
         $value = $this->getRelation($key, $data_value);
-        if (! is_null($value)) {
+        if (!is_null($value)) {
             return $value;
         }
 
@@ -84,6 +105,58 @@ class Response
     {
         return Arr::get($this->data, $key, $default);
     }
+
+    /**
+     * @return SdkClient
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * Get the attributes that have been changed since last sync.
+     *
+     * @return array
+     */
+    public function getDirty()
+    {
+        $dirty = [];
+
+        foreach ($this->data as $key => $value) {
+            if (!array_key_exists($key, $this->original)) {
+                $dirty[$key] = $value;
+            } elseif ($value !== $this->original[$key]) {
+                $dirty[$key] = $value;
+            }
+        }
+
+        return $dirty;
+    }
+
+    /**
+     * Determine if the model or given attribute(s) have been modified.
+     *
+     * @return bool
+     */
+    public function isDirty()
+    {
+        $dirty = $this->getDirty();
+
+        return count($dirty) > 0;
+    }
+
+    /**
+     * Sync the original attributes with the current.
+     *
+     * @return $this
+     */
+    public function syncOriginal()
+    {
+        $this->original = $this->data;
+
+        return $this;
+    }    
 
     /**
      * @param $key
@@ -120,7 +193,7 @@ class Response
     {
         // Verificar se foi implementado um relation
         $method = lcfirst(Str::studly($key));
-        if (! method_exists($this, $method)) {
+        if (!method_exists($this, $method)) {
             return null;
         }
 
@@ -136,7 +209,7 @@ class Response
 
         // Carregar relation
         $response = call_user_func_array([$this, $method], [$value]);
-        if (! $response instanceof ResponseObject) {
+        if (!$response instanceof ResponseObject) {
             throw new \Exception("Invalid relation [$key]");
         }
 
@@ -178,7 +251,7 @@ class Response
      */
     protected function toDate($value)
     {
-        if (! is_null($value)) {
+        if (!is_null($value)) {
             return Carbon::createFromFormat('Y-m-d H:i:s', $value);
         }
 

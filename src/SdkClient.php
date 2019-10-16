@@ -48,9 +48,7 @@ class SdkClient
 
         Credentials::setFromConfig($this->config);
 
-        $this->client = new Client([
-            'base_uri' => $this->getEndPoint(),
-        ]);
+        $this->client = new Client([]);
     }
 
     /**
@@ -74,7 +72,7 @@ class SdkClient
      * @return string
      * @throws \Exception
      */
-    protected function getEndPoint()
+    protected function getEndpoint()
     {
         // Verificar se foi informado o endpoitn explicito
         $url = $this->config('endpoint');
@@ -91,6 +89,15 @@ class SdkClient
     }
 
     /**
+     * Atribuir novos endpoints.
+     */
+    public function setEndpoints($sandbox, $production)
+    {
+        $this->endpoints[self::envSandbox]    = $sandbox;
+        $this->endpoints[self::envProduction] = $production;
+    }
+
+    /**
      * Requisição Asincrona.
      * 
      * @param $method
@@ -98,7 +105,7 @@ class SdkClient
      * @param array $options
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    protected function requestAsync($method, $uri = '', array $options = [])
+    public function requestAsync($method, $uri = '', array $options = [])
     {
         return $this->clientRequest(__FUNCTION__, $method, $uri, $options);
     }
@@ -111,7 +118,7 @@ class SdkClient
      * @param array $options
      * @return mixed
      */
-    protected function request($method, $uri = '', array $options = [])
+    public function request($method, $uri = '', array $options = [])
     {
         return $this->clientRequest(__FUNCTION__, $method, $uri, $options);
     }
@@ -127,7 +134,7 @@ class SdkClient
      */
     protected function clientRequest($clientMethod, $httpMethod, $uri = '', array $options = [])
     {
-        $this->prepareRequest($httpMethod, $options);
+        $this->prepareRequest($httpMethod, $uri, $options);
 
         $response = $this->client->$clientMethod($httpMethod, $uri, $options);
 
@@ -140,8 +147,8 @@ class SdkClient
      * Retorna o objeto response.
      * @return Response
      */
-    protected function toResponse($response)
+    public function toResponse($response)
     {
         return new Response($this, $response);
-    }
+    }    
 }
