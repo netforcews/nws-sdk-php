@@ -1,7 +1,6 @@
 <?php namespace NetForce\Sdk\Auth;
 
 use NetForce\Sdk\SdkClient;
-use NetForce\Sdk\Response;
 use NetForce\Sdk\Credentials;
 
 class AuthClient extends SdkClient
@@ -56,10 +55,20 @@ class AuthClient extends SdkClient
     /**
      * Retorna informações do usuario logado.
      * 
-     * @return Response
+     * @return \NetForce\Sdk\Response
      */
     public function me()
     {
         return $this->toResponse($this->request('get', 'me'));
+    }
+
+    /**
+     * Atribuir novas credenciais.
+     * 
+     * @param array $credentials
+     */
+    public function setCredentials($credentials)
+    {
+        Credentials::set($credentials);
     }
 }

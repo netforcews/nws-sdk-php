@@ -7,6 +7,9 @@ use NetForce\Sdk\Traits\PrepareResponse;
 
 class SdkClient
 {
+    const envProduction = 'production';
+    const envSandbox    = 'sandbox';
+
     use PrepareRequest;
     use PrepareResponse;
 
