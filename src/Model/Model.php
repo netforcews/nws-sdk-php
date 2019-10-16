@@ -104,7 +104,12 @@ class Model extends Response
      */
     public function delete()
     {
-        //..
+        // Se não foi carregado um objeto deve ignorar operação
+        if (! $this->exists) {
+            return;
+        }
+
+        return $this->executeDelete();
     }
 
     /**
@@ -208,7 +213,22 @@ class Model extends Response
             return;
         }
 
-        //
+        try {
+            $client = $this->getClient();
+
+            $id = $this->getKey();
+            
+            $ret = $client->toJson($client->request('delete', $id));
+
+            if ($ret['status']) {
+                $this->exists = false;
+            }
+
+    
+            return true;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     /**

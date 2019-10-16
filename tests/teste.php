@@ -33,6 +33,8 @@ $inq->save();
 $inq->nome = 'Teste 2 - atualizado';
 $inq->save();
 
+$inq->delete();
+
 
 /*
 $x = $reg->register([
