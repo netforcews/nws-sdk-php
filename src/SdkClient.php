@@ -2,13 +2,11 @@
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
-use NetForce\Sdk\Traits\PrepareRequest;
-use NetForce\Sdk\Traits\PrepareResponse;
 
 class SdkClient
 {
-    const envProduction = 'production';
     const envSandbox    = 'sandbox';
+    const envProduction = 'production';
 
     use PrepareRequest;
     use PrepareResponse;
@@ -35,6 +33,7 @@ class SdkClient
      * @var array
      */
     protected $headers = [
+        'User-Agent'    => '???',
         'Cache-Control' => 'no-cache',
         'Accept'        => 'application/json',
     ];
@@ -47,6 +46,8 @@ class SdkClient
         $this->config = $config;
 
         Credentials::setFromConfig($this->config);
+
+        $this->headers['User-Agent'] = 'nws/1.0.0 ' . \GuzzleHttp\default_user_agent();
 
         $this->client = new Client([]);
     }

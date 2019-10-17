@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd" 
+    backupGlobals="false" 
+    backupStaticAttributes="false" 
+    bootstrap="vendor/autoload.php" 
+    colors="true" 
+    convertErrorsToExceptions="true" 
+    convertNoticesToExceptions="true" 
+    convertWarningsToExceptions="true" 
+    processIsolation="false" 
+    stopOnFailure="false"
+    >
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="NWS_KEY" value="Gbie9Z9tK7xVKjIhiOgnYbmFfMFAJxHQBhsUMYeJQfgtgvkWXshwwX2AezIC"/>
+        <env name="NWS_SECRET" value="twgpwymoenUI19EJBraDHYOoOA8yihF6ydrCK9i2sXkJWEtGz5oigGrVIMLw"/>
+    </php>
+</phpunit>

@@ -1,4 +1,4 @@
-<?php namespace NetForce\Sdk\Traits;
+<?php namespace NetForce\Sdk;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;

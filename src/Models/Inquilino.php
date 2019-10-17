@@ -1,6 +1,6 @@
-<?php namespace NetForce\Sdk\Entities;
+<?php namespace NetForce\Sdk\Models;
 
-use NetForce\Sdk\Model\Model;
+use NetForce\Sdk\Models\Utils\Model;
 
 class Inquilino extends Model
 {

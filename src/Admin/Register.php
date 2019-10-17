@@ -1,17 +1,7 @@
-<?php namespace NetForce\Sdk\Register;
+<?php namespace NetForce\Sdk\Admin;
 
-use NetForce\Sdk\SdkClient;
-
-class RegisterClient extends SdkClient
+trait Register
 {
-    /**
-     * @var array
-     */
-    protected $endpoints = [
-        'production' => '', // http://api.com/{version}
-        'sandbox'    => 'http://localhost/apps/admin/public/',
-    ];
-
     /**
      * Registrar um novo inquilino e usuario admin.
      * 
@@ -28,9 +18,15 @@ class RegisterClient extends SdkClient
             ],
         ]));
 
+        if (!$ret['status']) {
+            return null;
+        }
+
+        $res = $ret['resources'];
+
         return [
-            'inquilino' => $this->toResponse($ret['inquilino']),
-            'usuario'   => $this->toResponse($ret['usuario']),
+            'inquilino' => $this->toResponse($res['inquilino']),
+            'usuario'   => $this->toResponse($res['usuario']),
         ];
     }
 }

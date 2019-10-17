@@ -1,18 +1,9 @@
-<?php namespace NetForce\Sdk\Auth;
+<?php namespace NetForce\Sdk\Admin;
 
-use NetForce\Sdk\SdkClient;
 use NetForce\Sdk\Credentials;
 
-class AuthClient extends SdkClient
+trait Auth
 {
-    /**
-     * @var array
-     */
-    protected $endpoints = [
-        'production' => '', // http://api.com/{version}
-        'sandbox'    => 'http://localhost/apps/admin/public/auth/',
-    ];
-
     /**
      * Executar login.
      * 
@@ -23,7 +14,7 @@ class AuthClient extends SdkClient
      */
     public function login($email, $password, $guard = true)
     {
-        $ret = $this->toJson($this->request('post', 'login', [
+        $ret = $this->toJson($this->request('post', 'auth/login', [
             'json' => [
                 'email'    => $email,
                 'password' => $password,
@@ -42,7 +33,7 @@ class AuthClient extends SdkClient
      */
     public function logout()
     {
-        $ret = $this->toJson($this->request('get', 'logout'));
+        $ret = $this->toJson($this->request('get', 'auth/logout'));
 
         // Remover credenciais
         if ($ret['status']) {
@@ -59,7 +50,7 @@ class AuthClient extends SdkClient
      */
     public function me()
     {
-        return $this->toResponse($this->request('get', 'me'));
+        return $this->toResponse($this->request('get', 'auth/me'));
     }
 
     /**

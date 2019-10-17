@@ -1,4 +1,4 @@
-<?php namespace NetForce\Sdk\Model;
+<?php namespace NetForce\Sdk\Models\Utils;
 
 use Exception;
 use NetForce\Sdk\Response;
@@ -6,8 +6,8 @@ use NetForce\Sdk\SdkClient;
 
 class Model extends Response
 {
-    const envProduction = SdkClient::envProduction;
     const envSandbox    = SdkClient::envSandbox;
+    const envProduction = SdkClient::envProduction;
 
     /**
      * @var array

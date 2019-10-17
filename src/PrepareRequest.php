@@ -1,6 +1,5 @@
-<?php namespace NetForce\Sdk\Traits;
+<?php namespace NetForce\Sdk;
 
-use NetForce\Sdk\Credentials;
 use Illuminate\Support\Str;
 
 trait PrepareRequest
