@@ -39,7 +39,7 @@ class Controller
      */
     public function query(array $params = [])
     {
-        $ret = $this->client->toJson($this->client->request('get', $this->uri));
+        $ret = $this->client->toJson($this->client->request('get', $this->uri('', $params)));
 
         $lista = array_map(function ($item) {
             return $this->newInstanceModel($item);
@@ -49,15 +49,15 @@ class Controller
     }
 
     /**
-     * Get um recurso pelo $id.
+     * Get um recurso pelo $id em params.
      * 
-     * @param string $id
+     * @param array $params
      * @return Model|null
      */
-    public function get($id)
+    public function get(array $params)
     {
         try {
-            $ret = $this->client->request('get', $this->uri . $id);
+            $ret = $this->client->request('get', $this->uri('{id}', $params));
 
             return $this->newInstanceModel($ret);
         } catch (Exception $e) {
@@ -73,16 +73,17 @@ class Controller
      * Criar um novo recurso.
      * 
      * @param Model|array $data
+     * @param array $params
      * @return Model|null
      */
-    public function create($data)
+    public function create($data, array $params = [])
     {
         // Tratar params
         if ($data instanceof Model) {
             $data = $data->toArray();
         }
 
-        $ret = $this->client->toJson($this->client->request('post', $this->uri, [
+        $ret = $this->client->toJson($this->client->request('post', $this->uri('', $params), [
             'json' => $data,
         ]));
 
@@ -96,11 +97,11 @@ class Controller
     /**
      * Atualizar um recurso pelo $id.
      * 
-     * @param string $id
+     * @param array $params
      * @param Model|array $data
      * @return Model|null
      */
-    public function update($id, $data)
+    public function update($params, $data)
     {
         // Tratar params
         if ($data instanceof Model) {
@@ -113,7 +114,7 @@ class Controller
             $data = $diff;
         }
 
-        $ret = $this->client->toJson($this->client->request('put', $this->uri . $id, [
+        $ret = $this->client->toJson($this->client->request('put', $this->uri('{id}', $params), [
             'json' => $data,
         ]));
 
@@ -127,12 +128,12 @@ class Controller
     /**
      * Delete um recurso pelo $id.
      * 
-     * @param string $id
+     * @param array $params
      * @return bool
      */
-    public function delete($id)
+    public function delete(array $params)
     {
-        $ret = $this->client->toJson($this->client->request('delete', $this->uri . $id));
+        $ret = $this->client->toJson($this->client->request('delete', $this->uri('{id}', $params)));
 
         return $ret['status'];
     }
@@ -148,5 +149,22 @@ class Controller
         $class = $this->modelClass;
 
         return new $class($this->client, $data);
+    }
+
+    /**
+     * Tratar URI.
+     * 
+     * @param string $part
+     * @param array $params
+     */
+    public function uri($part, $params = [])
+    {
+        $uri = $this->uri . $part;
+
+        foreach ($params as $key => $value) {
+            $uri = str_replace('{' . $key . '}', $value, $uri);
+        }
+
+        return $uri;
     }
 }

@@ -38,7 +38,7 @@ class InquilinoTest extends TestBase
      */
     public function testGetId(AdminClient $admin)
     {
-        $inq = $admin->inquilinos->get(TestAmbiente::$inquilino_id);
+        $inq = $admin->inquilinos->get(['id' => TestAmbiente::$inquilino_id]);
 
         $this->assertInstanceOf(Inquilino::class, $inq);
         $this->assertEquals(TestAmbiente::$inquilino_id, $inq->id);

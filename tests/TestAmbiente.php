@@ -61,6 +61,6 @@ class TestAmbiente
         $admin->login($email, $password);
 
         // Excluir inquilino
-        $admin->inquilinos->delete(static::$inquilino_id);
+        $admin->inquilinos->delete(['id' => static::$inquilino_id]);
     }
 }

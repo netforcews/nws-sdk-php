@@ -37,4 +37,13 @@ class AdminClient extends SdkClient
     {
         return $this->toModel('\NetForce\Sdk\Admin\Models\Usuario');
     }
+
+    /**
+     * Tokens.
+     * @return \NetForce\Sdk\Models\Utils\Controller
+     */
+    protected function tokens()
+    {
+        return $this->toModel('\NetForce\Sdk\Admin\Models\UsuarioToken', 'usuarios/{usuario_id}/tokens/');
+    }
 }
