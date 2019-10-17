@@ -8,6 +8,7 @@ class SdkClient
     const envSandbox    = 'sandbox';
     const envProduction = 'production';
 
+    use ClientModel;
     use PrepareRequest;
     use PrepareResponse;
 
@@ -137,7 +138,7 @@ class SdkClient
     {
         $this->prepareRequest($httpMethod, $uri, $options);
 
-        $response = $this->client->$clientMethod($httpMethod, $uri, $options);
+        $response = $this->client->$clientMethod($httpMethod, $this->preparaUriEnd($uri), $options);
 
         $this->testResponseError($response);
 
@@ -152,4 +153,13 @@ class SdkClient
     {
         return new Response($this, $response);
     }    
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->getModel($name);
+    }
 }

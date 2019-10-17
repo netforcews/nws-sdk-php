@@ -56,9 +56,7 @@ trait PrepareRequest
     {        
         // Base URI
         $base_uri = $this->getEndpoint();
-        if (($uri == '') && (Str::is('*/', $base_uri))) {
-            $base_uri = substr($base_uri, 0, -1);
-        }
+        $base_uri = ($uri == '') ? $this->preparaUriEnd($base_uri) : $base_uri;
         $options['base_uri'] = $base_uri;
 
         // Send XDebug
@@ -72,5 +70,21 @@ trait PrepareRequest
 
         // Headers
         $options['headers'] = $this->getRequestHeaders();
+    }
+
+    /**
+     * Tratar uri sem barra no final
+     * 
+     * @param string $uri
+     * @return string
+     */
+    protected function preparaUriEnd($uri)
+    {
+        // Verificar se deve remover ultima / no final da string
+        if (Str::is('*/', $uri)) {
+            $uri = substr($uri, 0, -1);
+        }
+
+        return $uri;
     }
 }

@@ -28,25 +28,14 @@ class Response
     protected $relation = [];
 
     /**
-     * @var string|null
-     */
-    protected $_refUri;
-
-    /**
-     * @var string
-     */
-    protected $_uriBase = '';
-
-    /**
      * @param SdkClient $client
      * @param $data
      */
-    public function __construct(SdkClient $client, $data = null, $refUri = null)
+    public function __construct(SdkClient $client, $data = null)
     {
         $this->client = $client;
-        $this->_refUri = $refUri;
 
-        $this->setRawAttributes($data);
+        $this->setRawAttributes($data, true);
     }
 
     /**
@@ -65,7 +54,7 @@ class Response
         $this->data = (array)$data;
 
         if ($original) {
-            $this->original = $this->data;
+            $this->syncOriginal();
         }
 
         return $this;
@@ -156,7 +145,15 @@ class Response
         $this->original = $this->data;
 
         return $this;
-    }    
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->data;
+    }
 
     /**
      * @param $key
@@ -226,25 +223,6 @@ class Response
     }
 
     /**
-     * Load ref.
-     */
-    protected function loadRef()
-    {
-        // Verificar se ref uri foi definido
-        if (is_null($this->_refUri)) {
-            return;
-        }
-
-        // Verificar se jah foi carregado
-        if (count($this->data) > 0) {
-            return;
-        }
-
-        // Carregar referencia
-        $this->data = $this->client->responseJson($this->client->request('get', $this->_refUri));
-    }
-
-    /**
      * Retorna uma data e hora.
      *
      * @return null|Carbon
@@ -256,39 +234,6 @@ class Response
         }
 
         return $value;
-    }
-
-    /**
-     * Update values.
-     *
-     * @param array $values
-     * @return bool
-     */
-    protected function toUpdate($resource, array $values, $except = [])
-    {
-        $data = Arr::except($values, $except);
-
-        $ret = $this->client->responseJson($this->client->request('put', $this->client->uri($resource, [$this->id]), [
-            'json' => $data,
-        ]));
-
-        if ($ret['success']) {
-            $this->data = array_merge([], $this->data, $data);
-        }
-
-        return $ret['success'];
-    }
-
-    /**
-     * Delete document.
-     *
-     * @return bool
-     */
-    protected function toDelete($resource)
-    {
-        $ret = $this->client->responseJson($this->client->request('delete', $this->client->uri($resource, [$this->id])));
-
-        return $ret['success'];
     }
 
     /**

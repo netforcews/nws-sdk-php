@@ -4,116 +4,103 @@ use Tests\TestBase;
 use Illuminate\Support\Arr;
 use NetForce\Sdk\Models\Inquilino;
 use NetForce\Sdk\Admin\AdminClient;
+use Tests\TestAmbiente;
 
 class AuthTest extends TestBase
 {
     /**
-     * @var AdminClient
+     * Carregar Admin.
      */
-    protected static $admin;
-
-    /**
-     * @var string|null
-     */
-    protected static $inquilino_id;
-
-    /**
-     * @var array
-     */
-    protected static $req_inquilino = [
-        'ns'       => 'testes',
-        'nome'     => 'Inquilino para os testes',
-        'situacao' => 'atv',
-    ];
-
-    /**
-     * @var array
-     */
-    protected static $req_usuario = [
-        'nome'     => 'Usuario de teste',
-        'email'    => 'teste@netforce.com.br',
-        'password' => '12345678',
-        'situacao' => 'atv',
-    ];
-
-    /**
-     * Preparar ambiente.
-     */
-    public static function setUpBeforeClass()
+    public function testAdmin()
     {
-        global $_ENV;
-
-        static::$admin = new AdminClient([
+        $admin = new AdminClient([
             'environment' => AdminClient::envSandbox,
-
-            //'credentials' => [
-            //    'key'    => $_ENV['NWS_KEY'],
-            //    'secret' => $_ENV['NWS_SECRET'],
-            //],
         ]);
+
+        return $admin;
     }
 
-    /**
+     /**
      * Testar /register.
      *
      * @return void
+     * @depends testAdmin
      */
-    public function testRegister()
+    public function testRegister(AdminClient $admin)
     {
-        $ret = static::$admin->register(static::$req_inquilino, static::$req_usuario);
+        $ret = $admin->register(TestAmbiente::$inquilino, TestAmbiente::$usuario);
 
         $this->assertInternalType('array', $ret);
 
-        static::$inquilino_id = $ret['inquilino']->id;
+        TestAmbiente::$inquilino_id = $ret['inquilino']->id;
 
         // Verificar Inquilino
-        foreach (static::$req_inquilino as $key => $val) {
-            $this->assertEquals(static::$req_inquilino[$key], $ret['inquilino']->{$key});
+        foreach (TestAmbiente::$inquilino as $key => $val) {
+            $this->assertEquals(TestAmbiente::$inquilino[$key], $ret['inquilino']->{$key});
         }
 
         // Verificar Usuario        
-        foreach (Arr::except(static::$req_usuario, ['password']) as $key => $val) {
-            $this->assertEquals(static::$req_usuario[$key], $ret['usuario']->{$key});
+        foreach (Arr::except(TestAmbiente::$usuario, ['password']) as $key => $val) {
+            $this->assertEquals(TestAmbiente::$usuario[$key], $ret['usuario']->{$key});
         }
+
+        return $admin;
     }
 
     /**
      * Testar /login ERRADO
      * @depends testRegister
-     * @expectedException Exception
-     * @expectedExceptionCode 400
-     * @expectedExceptionMessage Usuario ou senha incorretos
+     * xpectedException Exception
+     * xpectedExceptionCode 400
+     * xpectedExceptionMessage Usuario ou senha incorretos
      */
-    public function testLoginErrado()
+    public function testLoginErrado(AdminClient $admin)
     {
-        static::$admin->login('x@x.com', '1234', false);
+        try {
+            $admin->login('x@x.com', '1234', false);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\Exception::class, $e);
+            $this->assertEquals('400', $e->getCode());
+            $this->assertEquals('Usuario ou senha incorretos', $e->getMessage());
+        }
+
+        return $admin;
     }
 
     /**
      * Testar /login
      * @depends testLoginErrado
      */
-    public function testLoginCerto()
+    public function testLoginCerto(AdminClient $admin)
     {
-        $ret = static::$admin->login(static::$req_usuario['email'], static::$req_usuario['password']);
+        $email    = TestAmbiente::$usuario['email'];
+        $password = TestAmbiente::$usuario['password'];
+
+        $ret = $admin->login($email, $password);
 
         $this->assertInternalType('array', $ret);
         $this->assertArrayHasKey('access_token', $ret);
+
+        return $admin;
     }
 
     /**
      * Testar /me
      * @depends testLoginCerto
      */
-    public function testMe()
+    public function testMe(AdminClient $admin)
     {
-        $me = static::$admin->me();
+        $me = $admin->me();
+
+        $user = TestAmbiente::$usuario;
 
         //$this->assertEquals('3c8044061vc4d14184b75fb4223a6c5e43', $me->id);
-        $this->assertEquals(static::$inquilino_id,            $me->inquilino_id);
-        $this->assertEquals(static::$req_usuario['nome'],     $me->nome);
-        $this->assertEquals(static::$req_usuario['email'],    $me->email);
-        $this->assertEquals(static::$req_usuario['situacao'], $me->situacao);
+        $this->assertEquals(TestAmbiente::$inquilino_id, $me->inquilino_id);
+        $this->assertEquals($user['nome'],               $me->nome);
+        $this->assertEquals($user['email'],              $me->email);
+        $this->assertEquals($user['situacao'],           $me->situacao);
+
+        return $admin;
     }
 
     /**
@@ -122,13 +109,13 @@ class AuthTest extends TestBase
      * @expectedException Exception
      * @expectedExceptionMessage Unauthenticated.
      */
-    public function testLogout()
+    public function testLogout(AdminClient $admin)
     {
-        $ret = static::$admin->logout();
+        $ret = $admin->logout();
 
         $this->assertTrue($ret);
 
-        static::$admin->me();
+        $admin->me();
     }
 
     /**
@@ -136,14 +123,6 @@ class AuthTest extends TestBase
      */
     public static function tearDownAfterClass()
     {
-        global $_ENV;
-
-        static::$admin->login(static::$req_usuario['email'], static::$req_usuario['password']);
-
-        // Excluir inquilino...
-        if (static::$inquilino_id) {
-            $i = Inquilino::find(static::$inquilino_id, Inquilino::envSandbox);
-            $i->delete();
-        }
+        TestAmbiente::destroy();
     }
 }
