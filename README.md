@@ -10,7 +10,7 @@ O NWS SDK para PHP facilita para os desenvolvedores acessar os serviços da NetF
 
 ## Serviços
 
- - Admin - Registro e gestão de inquilino, usuários, empresas, filiais, acessos, permissões...
+ - (Admin)[/src/Admin/readme.md] - Registro e gestão de inquilino, usuários, empresas, filiais, acessos, permissões...
 
 
 ## Colaboradores
