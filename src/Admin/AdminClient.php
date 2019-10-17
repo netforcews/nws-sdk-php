@@ -6,6 +6,8 @@ use NetForce\Sdk\SdkClient;
  * Client used to interact with NetForce Admin
  * 
  * @property \NetForce\Sdk\Models\Utils\Controller $inquilinos
+ * @property \NetForce\Sdk\Models\Utils\Controller $usuarios
+ * @property \NetForce\Sdk\Models\Utils\Controller $tokens
  */
 class AdminClient extends SdkClient
 {
