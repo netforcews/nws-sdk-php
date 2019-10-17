@@ -1,6 +1,4 @@
-<?php namespace NetForce\Sdk\Models\Utils;
-
-use NetForce\Sdk\Response;
+<?php namespace NetForce\Sdk;
 
 class Model extends Response
 {

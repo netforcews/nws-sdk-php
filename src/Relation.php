@@ -1,4 +1,4 @@
-<?php namespace NetForce\Sdk\Models\Utils;
+<?php namespace NetForce\Sdk;
 
 class Relation
 {

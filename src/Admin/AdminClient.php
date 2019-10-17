@@ -26,7 +26,7 @@ class AdminClient extends SdkClient
      */
     protected function inquilinos()
     {
-        return $this->toModel('\NetForce\Sdk\Models\Inquilino');
+        return $this->toModel('\NetForce\Sdk\Admin\Models\Inquilino');
     }
 
     /**
@@ -35,6 +35,6 @@ class AdminClient extends SdkClient
      */
     protected function usuarios()
     {
-        return $this->toModel('\NetForce\Sdk\Models\Usuario');
+        return $this->toModel('\NetForce\Sdk\Admin\Models\Usuario');
     }
 }

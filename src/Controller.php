@@ -1,8 +1,6 @@
-<?php namespace NetForce\Sdk\Models\Utils;
+<?php namespace NetForce\Sdk;
 
 use Exception;
-use NetForce\Sdk\SdkClient;
-use NetForce\Sdk\Collection;
 
 class Controller
 {

@@ -1,4 +1,4 @@
-<?php namespace NetForce\Sdk\Models;
+<?php namespace NetForce\Sdk\Admin\Models;
 
 use NetForce\Sdk\Models\Utils\Model;
 

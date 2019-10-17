@@ -2,9 +2,9 @@
 
 use Tests\TestBase;
 use Tests\TestAmbiente;
-use NetForce\Sdk\Admin\AdminClient;
-use NetForce\Sdk\Models\Inquilino;
 use NetForce\Sdk\Collection;
+use NetForce\Sdk\Admin\AdminClient;
+use NetForce\Sdk\Admin\Models\Inquilino;
 
 class InquilinoTest extends TestBase
 {

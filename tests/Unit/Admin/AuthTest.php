@@ -1,10 +1,9 @@
 <?php namespace Tests\Unit\Admin;
 
 use Tests\TestBase;
-use Illuminate\Support\Arr;
-use NetForce\Sdk\Models\Inquilino;
-use NetForce\Sdk\Admin\AdminClient;
 use Tests\TestAmbiente;
+use Illuminate\Support\Arr;
+use NetForce\Sdk\Admin\AdminClient;
 
 class AuthTest extends TestBase
 {
