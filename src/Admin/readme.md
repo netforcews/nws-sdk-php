@@ -29,7 +29,7 @@ use NetForce\Sdk\Admin\AdminClient;
 
 //... criar um AdminClient...
 
-// Fazer login
+// Fazer login e carregar informações do usuário logado
 $user = $admin->login('seuemail@netforce.com.br', 'sua_senha');
 
 // Carregar informações do usuario logado
