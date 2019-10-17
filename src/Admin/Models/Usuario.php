@@ -1,6 +1,6 @@
 <?php namespace NetForce\Sdk\Admin\Models;
 
-use NetForce\Sdk\Models\Utils\Model;
+use NetForce\Sdk\Model;
 
 class Usuario extends Model
 {

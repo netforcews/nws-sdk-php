@@ -1,7 +1,6 @@
 <?php namespace NetForce\Sdk;
 
 use Illuminate\Support\Str;
-use NetForce\Sdk\Models\Utils\Controller;
 
 trait ClientModel
 {
@@ -10,7 +9,7 @@ trait ClientModel
     /**
      * Retorna as requisições da requisição.
      * 
-     * @return \NetForce\Sdk\Models\Utils\Controller
+     * @return \NetForce\Sdk\Controller
      */
     protected function toModel($model, $uri = null)
     {
@@ -23,7 +22,7 @@ trait ClientModel
 
     /**
      * Retorna controller do model.
-     * @return Controller
+     * @return \NetForce\Sdk\Controller
      */
     protected function getModel($model)
     {
