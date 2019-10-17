@@ -209,7 +209,7 @@ class Response
 
         // Carregar relation
         $response = call_user_func_array([$this, $method], [$value]);
-        if (!$response instanceof ResponseObject) {
+        if (!$response instanceof Response) {
             throw new \Exception("Invalid relation [$key]");
         }
 

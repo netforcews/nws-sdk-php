@@ -287,4 +287,6 @@ class Model extends Response
     {
         return $this->environment;
     }
+
+    //protected function belongsTo($related, $foreignKey = null, $ownerKey = null, $relation = null)
 }
