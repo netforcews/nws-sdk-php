@@ -11,7 +11,7 @@ require 'vendor/autoload.php';
 
 use NetForce\Sdk\Admin\AdminClient;
 
-// Instantiate an Amazon S3 client.
+// Criando instancia do Admin client.
 $admin = new AdminClient([
     'version'      => 'latest',
     'environment'  => AdminClient::envSandbox,
