@@ -13,22 +13,11 @@ $admin->setCredentials([
     'secret' => 'AgIwLR6B1l3gHkM0NjmWdGHKD1yYymW4Wu0QKDkXPekMVbwA3wUxuO2z6I8Q',
 ]);
 
-$inq = $admin->createInquilino([
-    'ns'       => 'meuteste',
-    'nome'     => 'Meu Teste',
-    'situacao' => 'atv',
-]);
+$usuario = $admin->me();
 
-$lista = $admin->listInquilinos();
+$nome = $usuario->inquilino->nome;
+$ns = $usuario->inquilino->ns;
 
-$x = $admin->getInquilino(['id' => $inq->id]);
-
-$x = $admin->updateInquilino([
-    'id' => $inq->id,
-    'nome' => 'Nome 2',
-]);
-
-$admin->deleteInquilino(['id' => $inq->id]);
 
 //$x = $admin->inquilinos->get('2ac5f0351vdf4e49f7b6923ee2fc235c4c');
 /**/

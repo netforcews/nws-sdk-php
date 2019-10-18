@@ -46,11 +46,11 @@ trait Auth
     /**
      * Retorna informações do usuario logado.
      * 
-     * @return \Nws\Response
+     * @return \Nws\Admin\Models\Usuario
      */
     public function me()
     {
-        return $this->newInstanceResult($this->request('get', 'auth/me'));
+        return $this->newInstanceResult($this->request('get', 'auth/me'), '\Nws\Admin\Models\Usuario');
     }
 
     /**

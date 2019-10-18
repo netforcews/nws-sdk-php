@@ -206,11 +206,11 @@ class Result
 
         // Carregar relation
         $response = call_user_func_array([$this, $method], [$value]);
-        if (!$response instanceof Result) {
+        if (!$response instanceof Relation) {
             throw new \Exception("Invalid relation [$key]");
         }
 
-        return $this->relation[$key] = $response;
+        return $this->relation[$key] = $response->getResults();
     }
 
     /**
@@ -268,5 +268,34 @@ class Result
     public function __set($name, $value)
     {
         $this->set($name, $value);
+    }
+
+    /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @param  string  $loader
+     * @param  string  $foreignKey
+     * @param  string  $localKey
+     * @return \Nws\BelongsTo
+     */
+    protected function belongsTo($loader = null, $foreignKey = null, $localKey = 'id')
+    {
+        if (is_null($foreignKey)) {
+            $lookup = $this->getCallerFunction();
+            $foreignKey = Str::snake($lookup) . '_id';
+        }
+
+        return new BelongsTo($this->client, $this, $foreignKey, $loader, $localKey);
+    }
+
+    /**
+     * Get function name of caller.
+     *
+     * @return string
+     */
+    protected function getCallerFunction()
+    {
+        list($one, $two, $caller) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+        return $caller['function'];
     }
 }
