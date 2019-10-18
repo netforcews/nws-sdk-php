@@ -9,7 +9,7 @@
 // Require the Composer autoloader.
 require 'vendor/autoload.php';
 
-use NetForce\Sdk\Admin\AdminClient;
+use Nws\Admin\AdminClient;
 
 // Criando instancia do Admin client.
 $admin = new AdminClient([
@@ -25,7 +25,7 @@ $admin = new AdminClient([
 // Require the Composer autoloader.
 require 'vendor/autoload.php';
 
-use NetForce\Sdk\Admin\AdminClient;
+use Nws\Admin\AdminClient;
 
 //... criar um AdminClient...
 

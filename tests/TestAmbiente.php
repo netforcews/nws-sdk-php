@@ -1,6 +1,6 @@
 <?php namespace Tests;
 
-use NetForce\Sdk\Admin\AdminClient;
+use Nws\Admin\AdminClient;
 
 class TestAmbiente
 {

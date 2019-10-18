@@ -1,13 +1,13 @@
-<?php namespace NetForce\Sdk\Admin;
+<?php namespace Nws\Admin;
 
-use NetForce\Sdk\SdkClient;
+use Nws\SdkClient;
 
 /**
  * Client used to interact with NetForce Admin
  * 
- * @property \NetForce\Sdk\Models\Utils\Controller $inquilinos
- * @property \NetForce\Sdk\Models\Utils\Controller $usuarios
- * @property \NetForce\Sdk\Models\Utils\Controller $tokens
+ * @property \Nws\Models\Utils\Controller $inquilinos
+ * @property \Nws\Models\Utils\Controller $usuarios
+ * @property \Nws\Models\Utils\Controller $tokens
  */
 class AdminClient extends SdkClient
 {
@@ -24,28 +24,28 @@ class AdminClient extends SdkClient
 
     /**
      * Inquilinos.
-     * @return \NetForce\Sdk\Models\Utils\Controller
+     * @return \Nws\Models\Utils\Controller
      */
     protected function inquilinos()
     {
-        return $this->toModel('\NetForce\Sdk\Admin\Models\Inquilino');
+        return $this->toModel('\Nws\Admin\Models\Inquilino');
     }
 
     /**
      * Usuarios.
-     * @return \NetForce\Sdk\Models\Utils\Controller
+     * @return \Nws\Models\Utils\Controller
      */
     protected function usuarios()
     {
-        return $this->toModel('\NetForce\Sdk\Admin\Models\Usuario');
+        return $this->toModel('\Nws\Admin\Models\Usuario');
     }
 
     /**
      * Tokens.
-     * @return \NetForce\Sdk\Models\Utils\Controller
+     * @return \Nws\Models\Utils\Controller
      */
     protected function tokens()
     {
-        return $this->toModel('\NetForce\Sdk\Admin\Models\UsuarioToken', 'usuarios/{usuario_id}/tokens/');
+        return $this->toModel('\Nws\Admin\Models\UsuarioToken', 'usuarios/{usuario_id}/tokens/');
     }
 }

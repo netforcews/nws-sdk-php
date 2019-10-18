@@ -1,4 +1,4 @@
-<?php namespace NetForce\Sdk;
+<?php namespace Nws;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;

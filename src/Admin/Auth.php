@@ -1,6 +1,6 @@
-<?php namespace NetForce\Sdk\Admin;
+<?php namespace Nws\Admin;
 
-use NetForce\Sdk\Credentials;
+use Nws\Credentials;
 
 trait Auth
 {
@@ -46,7 +46,7 @@ trait Auth
     /**
      * Retorna informações do usuario logado.
      * 
-     * @return \NetForce\Sdk\Response
+     * @return \Nws\Response
      */
     public function me()
     {

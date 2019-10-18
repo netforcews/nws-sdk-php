@@ -3,7 +3,7 @@
 use Tests\TestBase;
 use Tests\TestAmbiente;
 use Illuminate\Support\Arr;
-use NetForce\Sdk\Admin\AdminClient;
+use Nws\Admin\AdminClient;
 
 class AuthTest extends TestBase
 {

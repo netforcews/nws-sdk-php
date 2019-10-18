@@ -1,4 +1,4 @@
-<?php namespace NetForce\Sdk;
+<?php namespace Nws;
 
 use Illuminate\Support\Str;
 
@@ -9,7 +9,7 @@ trait ClientModel
     /**
      * Retorna as requisições da requisição.
      * 
-     * @return \NetForce\Sdk\Controller
+     * @return \Nws\Controller
      */
     protected function toModel($model, $uri = null)
     {
@@ -22,7 +22,7 @@ trait ClientModel
 
     /**
      * Retorna controller do model.
-     * @return \NetForce\Sdk\Controller
+     * @return \Nws\Controller
      */
     protected function getModel($model)
     {

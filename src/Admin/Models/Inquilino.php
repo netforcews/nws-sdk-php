@@ -1,6 +1,6 @@
-<?php namespace NetForce\Sdk\Admin\Models;
+<?php namespace Nws\Admin\Models;
 
-use NetForce\Sdk\Model;
+use Nws\Model;
 
 class Inquilino extends Model
 {

@@ -1,5 +1,5 @@
 <?php
-use NetForce\Sdk\Admin\AdminClient;
+use Nws\Admin\AdminClient;
 
 require __DIR__ . '/../vendor/autoload.php';
 

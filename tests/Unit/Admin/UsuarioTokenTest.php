@@ -2,9 +2,9 @@
 
 use Tests\TestBase;
 use Tests\TestAmbiente;
-use NetForce\Sdk\Collection;
-use NetForce\Sdk\Admin\AdminClient;
-use NetForce\Sdk\Admin\Models\UsuarioToken;
+use Nws\Collection;
+use Nws\Admin\AdminClient;
+use Nws\Admin\Models\UsuarioToken;
 
 class UsuarioTokenTest extends TestBase
 {

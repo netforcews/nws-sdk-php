@@ -1,4 +1,4 @@
-<?php namespace NetForce\Sdk\Admin;
+<?php namespace Nws\Admin;
 
 trait Register
 {
