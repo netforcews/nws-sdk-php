@@ -2,14 +2,11 @@
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class SdkClient
 {
-    const envSandbox    = 'sandbox';
-    const envProduction = 'production';
-
-    use ClientModel;
-    use PrepareRequest;
+    use ClientRequest;
     use PrepareResponse;
 
     /**
@@ -23,12 +20,18 @@ class SdkClient
     protected $config = [];
 
     /**
+     * Lista de endpoints do serviço.
+     * 
      * @var array
      */
-    protected $endpoints = [
-        'production' => '', // http://api.com/{version}
-        'sandbox'    => '', // http://api.sandbox.api.com/{version}
-    ];
+    protected $endpoints = [];
+
+    /**
+     * Lista de funções do serviço.
+     * 
+     * @var array
+     */
+    protected $functions = [];
 
     /**
      * @var array
@@ -51,10 +54,12 @@ class SdkClient
         $this->headers['User-Agent'] = 'nws/1.0.0 ' . \GuzzleHttp\default_user_agent();
 
         $this->client = new Client([]);
+
+        $this->loadDefinitions();
     }
 
     /**
-     * @param $key
+     * @param string|array $key
      * @param null $default
      * @return mixed
      */
@@ -91,75 +96,71 @@ class SdkClient
     }
 
     /**
-     * Atribuir novos endpoints.
+     * Carregar definições do serviço.
      */
-    public function setEndpoints($sandbox, $production)
+    protected function loadDefinitions()
     {
-        $this->endpoints[self::envSandbox]    = $sandbox;
-        $this->endpoints[self::envProduction] = $production;
+        $class = get_called_class();
+
+        // Carregar definições dos serviços
+        $services = __DIR__ . '/data/services.php';
+        if (! file_exists($services)) {
+            throw new \Exception("Definicoes dos servicos nao foram encontradas");
+        }
+        $services = require $services;
+
+        // Procurar servico
+        if (! array_key_exists($class, $services)) {
+            throw new \Exception("Definicoes do servico $class nao foram encontradas");
+        }
+
+        $def = $services[$class];
+
+        $this->endpoints = $def['endpoints'];
+        $this->functions = $def['functions'];
     }
 
     /**
-     * Requisição Asincrona.
+     * Executar função.
      * 
-     * @param $method
-     * @param string $uri
-     * @param array $options
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function requestAsync($method, $uri = '', array $options = [])
-    {
-        return $this->clientRequest(__FUNCTION__, $method, $uri, $options);
-    }
-
-    /**
-     * Requisição Sincrona.
-     * 
-     * @param $method
-     * @param string $uri
-     * @param array $options
+     * @param string $name
+     * @param array $args
      * @return mixed
      */
-    public function request($method, $uri = '', array $options = [])
+    protected function callFunction($name, $args)
     {
-        return $this->clientRequest(__FUNCTION__, $method, $uri, $options);
+        $func = $this->functions[$name];
+        
+        $method = 'action' . Str::studly($func['action']);
+        if (! method_exists($this, $method)) {
+            throw new \Exception("Action nao implementada: " . $func['action']);
+        }
+
+        return call_user_func_array([$this, $method], [$func, $args]);
     }
 
     /**
-     * Executa requisição.
-     * 
-     * @param $clientMethod
-     * @param $httpMethod
-     * @param string $uri
-     * @param array $options
-     * @return mixed
-     */
-    protected function clientRequest($clientMethod, $httpMethod, $uri = '', array $options = [])
-    {
-        $this->prepareRequest($httpMethod, $uri, $options);
-
-        $response = $this->client->$clientMethod($httpMethod, $this->preparaUriEnd($uri), $options);
-
-        $this->testResponseError($response);
-
-        return $response;
-    }
-
-    /**
-     * Retorna o objeto response.
-     * @return Response
-     */
-    public function toResponse($response)
-    {
-        return new Response($this, $response);
-    }    
-
-    /**
-     * @param $name
+     * @param string $name
      * @return mixed
      */
     public function __get($name)
     {
         return $this->getModel($name);
+    }
+
+    /**
+     * @param string $name
+     * @param array $arguments
+     * @return mixed|null
+     */
+    public function __call($name, $arguments)
+    {
+        // Procurar por funções
+        if (array_key_exists($name, $this->functions)) {
+            $args = (count($arguments) >= 1) ? $arguments[0] : [];
+            return $this->callFunction($name, $args);
+        }
+
+        throw new \Exception("Funcao $name nao definida");
     }
 }

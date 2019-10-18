@@ -1,5 +1,6 @@
 <?php namespace Tests\Unit\Admin;
 
+use Nws\Sdk;
 use Tests\TestBase;
 use Tests\TestAmbiente;
 use Illuminate\Support\Arr;
@@ -13,7 +14,7 @@ class AuthTest extends TestBase
     public function testAdmin()
     {
         $admin = new AdminClient([
-            'environment' => AdminClient::envSandbox,
+            'environment' => Sdk::envSandbox,
         ]);
 
         return $admin;

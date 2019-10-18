@@ -1,5 +1,6 @@
 <?php namespace Tests;
 
+use Nws\Sdk;
 use Nws\Admin\AdminClient;
 
 class TestAmbiente
@@ -34,7 +35,7 @@ class TestAmbiente
     public static function create()
     {
         $admin = new AdminClient([
-            'environment' => AdminClient::envSandbox,
+            'environment' => Sdk::envSandbox,
         ]);
 
         $ret = $admin->register(static::$inquilino, static::$usuario);
@@ -52,7 +53,7 @@ class TestAmbiente
         }
 
         $admin = new AdminClient([
-            'environment' => AdminClient::envSandbox,
+            'environment' => Sdk::envSandbox,
         ]);
 
         // Fazer login
@@ -61,6 +62,6 @@ class TestAmbiente
         $admin->login($email, $password);
 
         // Excluir inquilino
-        $admin->inquilinos->delete(['id' => static::$inquilino_id]);
+        $admin->deleteInquilino(['id' => static::$inquilino_id]);
     }
 }

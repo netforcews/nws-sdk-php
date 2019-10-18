@@ -6,6 +6,20 @@ use Psr\Http\Message\ResponseInterface;
 trait PrepareResponse
 {
     /**
+     * Criar nova instancia do result.
+     * 
+     * @param array $data
+     * @param string|null $result
+     * @return Result
+     */
+    protected function newInstanceResult($data = [], $result = null)
+    {
+        $result = empty($result) ? '\Nws\Result' : $result;
+
+        return new $result($this, $data);
+    }
+    
+    /**
      * @param ResponseInterface $response
      * @return null|array
      */

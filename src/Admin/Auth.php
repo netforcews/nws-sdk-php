@@ -50,7 +50,7 @@ trait Auth
      */
     public function me()
     {
-        return $this->toResponse($this->request('get', 'auth/me'));
+        return $this->newInstanceResult($this->request('get', 'auth/me'));
     }
 
     /**

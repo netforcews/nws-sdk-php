@@ -1,5 +1,6 @@
 <?php namespace Tests\Unit\Admin;
 
+use Nws\Sdk;
 use Tests\TestBase;
 use Tests\TestAmbiente;
 use Nws\Collection;
@@ -22,7 +23,7 @@ class InquilinoTest extends TestBase
     public function testAdminAndLogin()
     {
         $admin = new AdminClient([
-            'environment' => AdminClient::envSandbox,
+            'environment' => Sdk::envSandbox,
         ]);
 
         // Fazer login
@@ -38,7 +39,7 @@ class InquilinoTest extends TestBase
      */
     public function testGetId(AdminClient $admin)
     {
-        $inq = $admin->inquilinos->get(['id' => TestAmbiente::$inquilino_id]);
+        $inq = $admin->getInquilino(['id' => TestAmbiente::$inquilino_id]);
 
         $this->assertInstanceOf(Inquilino::class, $inq);
         $this->assertEquals(TestAmbiente::$inquilino_id, $inq->id);
@@ -53,7 +54,7 @@ class InquilinoTest extends TestBase
      */
     public function testGetList(AdminClient $admin)
     {
-        $col = $admin->inquilinos->query();
+        $col = $admin->listInquilinos();
 
         $this->assertInstanceOf(Collection::class, $col);
         $this->assertGreaterThanOrEqual(1, $col->count());

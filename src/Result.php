@@ -5,7 +5,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 
-class Response
+class Result
 {
     /**
      * @var SdkClient
@@ -206,7 +206,7 @@ class Response
 
         // Carregar relation
         $response = call_user_func_array([$this, $method], [$value]);
-        if (!$response instanceof Response) {
+        if (!$response instanceof Result) {
             throw new \Exception("Invalid relation [$key]");
         }
 

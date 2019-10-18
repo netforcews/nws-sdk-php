@@ -1,8 +1,8 @@
 <?php namespace Tests\Unit\Admin;
 
+use Nws\Sdk;
 use Tests\TestBase;
 use Tests\TestAmbiente;
-use Nws\Collection;
 use Nws\Admin\AdminClient;
 use Nws\Admin\Models\UsuarioToken;
 
@@ -22,7 +22,7 @@ class UsuarioTokenTest extends TestBase
     public function testAdminAndLogin()
     {
         $admin = new AdminClient([
-            'environment' => AdminClient::envSandbox,
+            'environment' => Sdk::envSandbox,
         ]);
 
         // Fazer login
@@ -41,10 +41,11 @@ class UsuarioTokenTest extends TestBase
         $me = $admin->me();
 
         $token = [
+            'usuario_id' => $me->id,
             'descricao' => 'Novo token',
         ];
 
-        $tk = $admin->tokens->create($token, [ 'usuario_id' => $me->id]);
+        $tk = $admin->createUsuarioToken($token);
 
         $this->assertInstanceOf(UsuarioToken::class, $tk);
         $this->assertNotNull($tk->id);

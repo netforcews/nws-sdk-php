@@ -25,8 +25,8 @@ trait Register
         $res = $ret['resources'];
 
         return [
-            'inquilino' => $this->toResponse($res['inquilino']),
-            'usuario'   => $this->toResponse($res['usuario']),
+            'inquilino' => $this->newInstanceResult($res['inquilino']),
+            'usuario'   => $this->newInstanceResult($res['usuario']),
         ];
     }
 }
