@@ -106,10 +106,10 @@ class AuthTest extends TestBase
     }
 
     /**
-     * Testar /me - via accesstoken
+     * Testar /me - via accesstoken no create
      * @depends testLoginCerto
      */
-    public function testMeViaAccessToken($info)
+    public function testMeViaAccessTokenCreate($info)
     {
         // Criar novo Admin não logado ainda
         $admin = new AdminClient([
@@ -133,8 +133,36 @@ class AuthTest extends TestBase
     }
 
     /**
+     * Testar /me - via accesstoken no set
+     * @depends testMeViaAccessTokenCreate
+     */
+    public function testMeViaAccessTokenSet($info)
+    {
+        // Criar novo Admin não logado ainda
+        $admin = new AdminClient([
+            'environment' => Sdk::envSandbox,
+        ]);
+
+        $admin->setCredentials([
+            'access_token' => $info['access_token'],
+        ]);
+
+        $me = $admin->me();
+
+        $user = TestAmbiente::$usuario;
+
+        //$this->assertEquals('3c8044061vc4d14184b75fb4223a6c5e43', $me->id);
+        $this->assertEquals(TestAmbiente::$inquilino_id, $me->inquilino_id);
+        $this->assertEquals($user['nome'],               $me->nome);
+        $this->assertEquals($user['email'],              $me->email);
+        $this->assertEquals($user['situacao'],           $me->situacao);
+
+        return $info['admin'];
+    }
+
+    /**
      * Testar /logout
-     * @depends testMe
+     * @depends testMeViaAccessTokenSet
      * @expectedException Exception
      * @expectedExceptionMessage Unauthenticated.
      */
