@@ -81,15 +81,17 @@ class AuthTest extends TestBase
         $this->assertInternalType('array', $ret);
         $this->assertArrayHasKey('access_token', $ret);
 
-        return $admin;
+        return ['admin' => $admin, 'access_token' => $ret['access_token']];
     }
 
     /**
      * Testar /me
      * @depends testLoginCerto
      */
-    public function testMe(AdminClient $admin)
+    public function testMe($info)
     {
+        $admin = $info['admin'];
+
         $me = $admin->me();
 
         $user = TestAmbiente::$usuario;
@@ -101,6 +103,33 @@ class AuthTest extends TestBase
         $this->assertEquals($user['situacao'],           $me->situacao);
 
         return $admin;
+    }
+
+    /**
+     * Testar /me - via accesstoken
+     * @depends testLoginCerto
+     */
+    public function testMeViaAccessToken($info)
+    {
+        // Criar novo Admin não logado ainda
+        $admin = new AdminClient([
+            'environment' => Sdk::envSandbox,
+            'credentials' => [
+                'access_token' => $info['access_token'],
+            ],
+        ]);
+
+        $me = $admin->me();
+
+        $user = TestAmbiente::$usuario;
+
+        //$this->assertEquals('3c8044061vc4d14184b75fb4223a6c5e43', $me->id);
+        $this->assertEquals(TestAmbiente::$inquilino_id, $me->inquilino_id);
+        $this->assertEquals($user['nome'],               $me->nome);
+        $this->assertEquals($user['email'],              $me->email);
+        $this->assertEquals($user['situacao'],           $me->situacao);
+
+        return $info;
     }
 
     /**
